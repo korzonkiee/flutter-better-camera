@@ -989,6 +989,10 @@ public class Camera {
 /*
         Log.d(previewSize, "Manual focus already engaged");
         Log.d(sensorArraySize.height(), "Manual focus already engaged");*/
+
+        // Disable auto focus
+        mAutoFocus = false;
+
         final Rect sensorArraySize = mCameraCharacteristics.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE);
 
         final int x = (int)(offsetX  * (float)sensorArraySize.height());
