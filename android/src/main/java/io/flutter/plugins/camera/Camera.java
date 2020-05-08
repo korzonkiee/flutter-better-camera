@@ -371,7 +371,8 @@ public class Camera {
             break;
           }
           if (af == CaptureResult.CONTROL_AF_STATE_FOCUSED_LOCKED ||
-                  af == CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED) {
+                  af == CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED ||
+                  af == CaptureResult.CONTROL_AF_STATE_PASSIVE_FOCUSED) {
             Integer ae = result.get(CaptureResult.CONTROL_AE_STATE);
             if (ae == null || ae == CaptureResult.CONTROL_AE_STATE_CONVERGED) {
               setState(STATE_CAPTURING);
@@ -643,7 +644,7 @@ public class Camera {
 
               updateAutoFocus();
               updateFlash();
-              //updateWhiteBalance();
+              updateWhiteBalance();
 
               if (Camera.this.aeFPSRange != null) {
                 mPreviewRequestBuilder.set(
@@ -744,9 +745,9 @@ public class Camera {
           break;
         case Constants.FLASH_ON:
           mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
-                  CaptureRequest.CONTROL_AE_MODE_ON_ALWAYS_FLASH);
+                  CaptureRequest.CONTROL_AE_MODE_ON);
           mPreviewRequestBuilder.set(CaptureRequest.FLASH_MODE,
-                  CaptureRequest.FLASH_MODE_OFF);
+                  CaptureRequest.FLASH_MODE_SINGLE);
           break;
         case Constants.FLASH_TORCH:
           mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
@@ -989,6 +990,10 @@ public class Camera {
 /*
         Log.d(previewSize, "Manual focus already engaged");
         Log.d(sensorArraySize.height(), "Manual focus already engaged");*/
+
+        // Disable auto focus
+        mAutoFocus = false;
+
         final Rect sensorArraySize = mCameraCharacteristics.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE);
 
         final int x = (int)(offsetX  * (float)sensorArraySize.height());
